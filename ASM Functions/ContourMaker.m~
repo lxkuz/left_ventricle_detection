@@ -1,0 +1,45 @@
+function [contour] = ContourMaker(path)
+
+% READ IMAGE
+origImg = imread('so.png');
+
+% Create a binary image of the original image being white the contours and
+% black the rest
+BW = im2bw(imcomplement(rgb2gray(origImg)));
+% show it
+imshow(BW,[]);
+% wait 2 seconds so you can see it
+pause(2)
+s = size(BW);
+
+
+% Go iterating thougth rows and cols until you find something white
+% (contour)
+for row = 2:15:s(1)
+    for col = 1:s(2)
+        if BW(row,col)
+            break; %something white found!
+        end
+    end
+    % Trace that boundary! Starting in the white point (row,col) 
+    contour = bwtraceboundary(BW,[row col],'W',8,200,'counterclockwise');
+
+    % Did we actually found a contour or its just empty (e.g. it was
+    % point)
+    if(~isempty(contour))
+        % There is a contour! lets plot it (we will only get a piece of it,
+        % because we specified that only 200 points of it will be used!
+
+        hold on;
+        % plot the contour in green
+        plot(contour(:,2),contour(:,1),'g','LineWidth',2);
+        hold on;
+        % plot the initial point of the conotur in blue
+        plot(col,row,'bx','LineWidth',2);
+        pause(1)
+    else
+        % If there was not a contour just put a red X on it
+        hold on;
+        plot(col,row,'rx','LineWidth',2);
+    end
+end

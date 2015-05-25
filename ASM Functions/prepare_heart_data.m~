@@ -1,0 +1,22 @@
+function [result_data] = PrepareHeartData(imagePath, contourPath, format)
+result_data = struct;
+im = imread(imagePath);
+result_data.('I') = rgb2gray(im);
+contour = im2bw(imread(contourPath));
+[white_coords_x, white_coords_y] = find(contour == 1);
+coords_size = length(white_coords_x);
+steps_count = 100;
+clear_it = 1;
+cleaned_white_coords_x = [];
+cleaned_white_coords_y = [];
+for it = 1:round(coords_size/steps_count):coords_size
+    cleaned_white_coords_x(clear_it,1) = white_coords_x(it,1);
+    cleaned_white_coords_y(clear_it,1) = white_coords_y(it,1);
+    clear_it = clear_it + 1;
+end;
+clear white_coords_x white_coords_y;
+result_data.('n') = length(cleaned_white_coords_x);
+result_data.('x') = cleaned_white_coords_x;
+result_data.('y') = cleaned_white_coords_y;
+for it = 1:1:coords_size
+I=im2double(imread(filename));
